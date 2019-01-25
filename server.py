@@ -14,7 +14,7 @@ while run_server:
     for key, command in commands.items():
         print("command {0}: {1}".format(command, key))
 
-    command = input("Input command: ")
+    command = int(input("Input command: "))
     if command == commands["STOP_SERVER"]:
         run_server = False
 
