@@ -5,9 +5,8 @@ run_client = True
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 commands = {"STOP_CLIENT": 0,  "RUN_TEST1": 1}
-img = open("img/cat.jpg", "rb")
-img_data = img.read()
-buf_size = len(img_data)
+img = open("img/cat.bmp", "rb")
+
 
 while run_client:
     print("Client actions:")
@@ -33,25 +32,34 @@ while run_client:
             print("Отойдите на расстояние в {0} метров от точки доступа.".format(dist))
             input("Для продолжения нажмите enter")
             print("Начинаю тестирование.")
-            print("Отправка размера картинки.")
-            udp_socket.sendto(bytes(str(buf_size), "utf-8"), (server_ip, server_port))
             print("Ожидаю готовности от сервера.")
-            data, address = udp_socket.recvfrom(1024)
-            data = data.decode("utf-8")
-            if data == "READY":
-                print("Сервер готов.")
-                print("Отправляю картинку.")
-                start_time = time.time()
-                udp_socket.sendto(img_data, (server_ip, server_port))
-                end_time = time.time()
-                send_time = end_time - start_time
-                if send_time:
-                    speed = buf_size / send_time
-                else:
-                    speed = 0
-                speeds.append(speed)
-                times.append(send_time)
-                print("Затраченное на отправку время: ", send_time)
-                print("Скорость: {0} Б/Сек".format(speed))
+            print("Сервер готов.")
+            print("Отправляю картинку.")
+            start_time = time.time()
+            BUF_SIZE = 4096
+            parts = 0
+            img.seek(0)
+            img_size = 3.33 * 1000000
+            count_parts = img_size / BUF_SIZE
+            while True:
+                part = img.read(BUF_SIZE)
+                udp_socket.sendto(part, (server_ip, server_port))
+                parts += 1
+                print(str(parts) + "/" + str(count_parts))
+                if len(part) < BUF_SIZE:
+                    break
+
+            end_time = time.time()
+            send_time = end_time - start_time
+            print("start time: ", start_time)
+            print("end time: ", end_time)
+            if send_time:
+                speed = BUF_SIZE * parts/ send_time
+            else:
+                speed = 0
+            speeds.append(speed)
+            times.append(send_time)
+            print("Затраченное на отправку время: ", send_time)
+            print("Скорость: {0} Б/Сек".format(speed))
         print(speeds)
         print(times)
