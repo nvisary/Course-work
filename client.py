@@ -49,15 +49,15 @@ while run_client:
             count_parts = img_size // BUF_SIZE
             parts = 0
             img.seek(0)
+            print("Передача...")
             while True:
                 part = img.read(BUF_SIZE)
                 udp_socket.sendto(part, (server_ip, server_port))
                 parts += 1
-                print(str(parts) + "/" + str(count_parts))
                 if len(part) < BUF_SIZE:
                     break
-
             end_time = time.time()
+            print("Передача окончена.")
             send_time = end_time - start_time
             print("start time: ", start_time)
             print("end time: ", end_time)
