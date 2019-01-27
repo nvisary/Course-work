@@ -1,7 +1,7 @@
 # сервер запускаем на Raspberry
 # он ждет подключения, обрабатывая команды / либо команды вводятся с клавиатуры
 import socket
-
+import util
 commands = {"STOP_SERVER": 0, "RUN_TEST1": 1}
 
 run_server = True
@@ -25,15 +25,10 @@ while run_server:
         print("Запустите Test1 на клиенте.")
         for dist in distance:
             print("Сервер UDP запущен и ожидает данных на порту {0}".format(server_port))
-
-            buf_size, address = udp_socket.recvfrom(1024)
-            buf_size = int(buf_size.decode("utf-8"))
-            print("Получен размер изображения: {0}".format(buf_size))
-            print("Ожидаю отправки изображения.")
-            udp_socket.sendto(bytes("READY", "utf-8"), address)
-            file_data, address = udp_socket.recvfrom(buf_size)
-
-            f = open("received.jpg", "wb")
+            file_data = util.recv_all(udp_socket)
+            f = open("received.bmp", "wb")
             f.write(file_data)
             f.close()
             print("Изображение принято и сохранено.")
+
+
