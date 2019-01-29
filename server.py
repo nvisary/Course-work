@@ -2,9 +2,9 @@
 # он ждет подключения, обрабатывая команды / либо команды вводятся с клавиатуры
 import socket
 import util
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
-commands = {"STOP_SERVER": 0, "RUN_TEST1": 1, "RUN_TEST2": 2, "PRINT_GRAPHICS": 3}
+commands = {"STOP_SERVER": 0, "RUN_TEST1": 1, "RUN_TEST2": 2}
 
 run_server = True
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -65,10 +65,11 @@ while run_server:
             f.close()
 
 
-    if command == commands["PRINT_GRAPHICS"]:
+    '''if command == commands["PRINT_GRAPHICS"]:
         if len(lost_packets) == len(distance):
             plt.title("UDP потери от расстояния")
             plt.xlabel("Расстояние м")
             plt.ylabel("Потерянные пакеты %")
             plt.plot(distance, lost_packets)
             plt.show()
+'''
