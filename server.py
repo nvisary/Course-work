@@ -56,13 +56,13 @@ while run_server:
         print("Сервер TCP запущен и ожидает данных на порту {0}".format(server_tcp_port))
         print("Запустите Test2 на клиенте.")
         connection, address = tcp_socket.accept()
-
+        print("Клиент подключен")
         for dist in distance:
-
             file_data = connection.recv(img_size)
             f = open("tcp_received{0}.bmp".format(dist), "wb")
             f.write(file_data)
             f.close()
+            print("Картинка сохранена.")
 
 
     '''if command == commands["PRINT_GRAPHICS"]:
